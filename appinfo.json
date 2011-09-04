@@ -1,0 +1,10 @@
+{
+  "id": "ng.tzeyang.touchpad.gitamin",
+  "version": "1.0.0",
+  "vendor": "NgTzeYang",
+  "type": "web",
+  "main": "index.html",
+  "title": "Gitamin",
+  "uiRevision": "2",
+  "icon": "icon.png"
+}
