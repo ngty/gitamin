@@ -1,0 +1,33 @@
+#!/bin/bash
+
+BIN_DIR=`dirname $0`
+BIN_DIR=`cd $BIN_DIR && pwd`
+GIT_DIR=${BIN_DIR}/phantomjs.git
+PHANTOMJS_GIT=git://github.com/ariya/phantomjs.git
+PHANTOMJS_VER='1.2'
+PHANTOMJS_BIN=${BIN_DIR}/phantomjs.git/bin/phantomjs
+
+if [[ ! -f $PHANTOMJS_BIN ]]; then
+  echo ">> Missing ${PHANTOMJS_BIN}, attempting to build one ... "
+
+  cd $BIN_DIR && \
+    git clone $PHANTOMJS_GIT $GIT_DIR && \
+    cd $GIT_DIR && \
+    git checkout $PHANTOMJS_VER && \
+    qmake && \
+    make
+
+  if [[ -f $PHANTOMJS_BIN ]]; then
+    echo ">> success."
+  else
+    echo ">> failure."
+    echo ">> Pls see build instructions at:"
+    echo ">> http://code.google.com/p/phantomjs/wiki/BuildInstructions"
+    exit 1
+  fi
+fi
+
+cd ${BIN_DIR}/.. && \
+  ${BIN_DIR}/phantomjs.git/bin/phantomjs $@
+
+# __END__
