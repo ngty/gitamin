@@ -2,7 +2,9 @@
 
 BIN_DIR=`dirname $0`
 BIN_DIR=`cd $BIN_DIR && pwd`
-GIT_DIR=${BIN_DIR}/phantomjs.git
+APP_DIR=`cd ${BIN_DIR}/.. && pwd`
+GIT_DIR=`cd ${BIN_DIR}/phantomjs.git && pwd`
+
 PHANTOMJS_GIT=git://github.com/ariya/phantomjs.git
 PHANTOMJS_VER='1.2'
 PHANTOMJS_BIN=${BIN_DIR}/phantomjs.git/bin/phantomjs
@@ -27,7 +29,11 @@ if [[ ! -f $PHANTOMJS_BIN ]]; then
   fi
 fi
 
-cd ${BIN_DIR}/.. && \
-  ${BIN_DIR}/phantomjs.git/bin/phantomjs $@
+if [[ $# == 0 ]]; then
+  echo "USAGE: ${0} URL"
+else
+  cd ${APP_DIR} && \
+    ${GIT_DIR}/bin/phantomjs ${GIT_DIR}/examples/run-jasmine.coffee $@
+fi
 
 # __END__
