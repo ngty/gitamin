@@ -3,18 +3,25 @@
 BIN_DIR=`dirname $0`
 BIN_DIR=`cd $BIN_DIR && pwd`
 APP_DIR=`cd ${BIN_DIR}/.. && pwd`
-GIT_DIR=`cd ${BIN_DIR}/phantomjs.git && pwd`
 
-PHANTOMJS_GIT=git://github.com/ariya/phantomjs.git
+PHANTOMJS_DIR=${BIN_DIR}/phantomjs.git
+PHANTOMJS_GIT=https://github.com/ariya/phantomjs.git
 PHANTOMJS_VER='1.2'
 PHANTOMJS_BIN=${BIN_DIR}/phantomjs.git/bin/phantomjs
 
+JASMIN_DIR=${BIN_DIR}/jasmine.git
+JASMIN_GIT=https://github.com/pivotal/jasmine.git
+JASMIN_VER=6b5956724b7e64325c6465bc426bd924d6f2aefe
+
+# ///////////////////////////////////////////////////////////////
+# Initalize phantomjs
+# ///////////////////////////////////////////////////////////////
 if [[ ! -f $PHANTOMJS_BIN ]]; then
-  echo ">> Missing ${PHANTOMJS_BIN}, attempting to build one ... "
+  echo "= Missing ${PHANTOMJS_BIN}, building it ... "
 
   cd $BIN_DIR && \
-    git clone $PHANTOMJS_GIT $GIT_DIR && \
-    cd $GIT_DIR && \
+    git clone $PHANTOMJS_GIT $PHANTOMJS_DIR && \
+    cd $PHANTOMJS_DIR && \
     git checkout $PHANTOMJS_VER && \
     qmake && \
     make
@@ -29,11 +36,33 @@ if [[ ! -f $PHANTOMJS_BIN ]]; then
   fi
 fi
 
+# ///////////////////////////////////////////////////////////////
+# Initalize jasmine
+# ///////////////////////////////////////////////////////////////
+if [[ ! -d $JASMIN_DIR ]]; then
+  echo "= Missing ${JASMIN_DIR}, cloning it ... "
+
+  cd $BIN_DIR && \
+    git clone $JASMIN_GIT $JASMIN_DIR && \
+    cd $JASMIN_DIR && \
+    git checkout $JASMIN_VER
+
+  if [[ -d $JASMIN_DIR ]]; then
+    echo ">> success."
+  else
+    echo ">> failure."
+    exit 1
+  fi
+fi
+
+# ///////////////////////////////////////////////////////////////
+# Run test suite
+# ///////////////////////////////////////////////////////////////
 if [[ $# == 0 ]]; then
   echo "USAGE: ${0} URL"
 else
   cd ${APP_DIR} && \
-    ${GIT_DIR}/bin/phantomjs ${BIN_DIR}/run-jasmine.coffee $@
+    ${PHANTOMJS_DIR}/bin/phantomjs ${BIN_DIR}/run-jasmine.coffee $@
 fi
 
 # __END__
