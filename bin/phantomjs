@@ -33,7 +33,7 @@ if [[ $# == 0 ]]; then
   echo "USAGE: ${0} URL"
 else
   cd ${APP_DIR} && \
-    ${GIT_DIR}/bin/phantomjs ${GIT_DIR}/examples/run-jasmine.coffee $@
+    ${GIT_DIR}/bin/phantomjs ${BIN_DIR}/run-jasmine.coffee $@
 fi
 
 # __END__
